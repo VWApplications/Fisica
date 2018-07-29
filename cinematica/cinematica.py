@@ -1,8 +1,4 @@
-from biblioteca.fisica.basico import Basico
-from biblioteca.fisica.ultrapassagem import Ultrapassagem
-from biblioteca.fisica.mu import MU
-from biblioteca.fisica.muv import MUV
-from biblioteca.fisica.lancamento import LancamentoVertical
+from .fisica import Basico, Ultrapassagem, MU, MUV, LancamentoVertical
 
 
 class Cinematica(object):
@@ -18,7 +14,10 @@ class Cinematica(object):
 
     def __init__(self, operacao):
         """
-        Constructor of kinematics topics
+        Construtor de operações de cinemática
+
+        :param operacao: Constante que representa o conteúdo de cinempatica,
+        opções: BASICO, ULTRAPASSAGEM, MU, MUV, LANCAMENTO_VERTICAL
         """
 
         if operacao == self.BASICO:
@@ -36,7 +35,12 @@ class Cinematica(object):
 
     def calcular(self, operacao, **kwargs):
         """
-        Calcular operações de cinemática.
+        Calcula as operações de cinemática
+
+        :param operacao: Constante que representa o conteúdo de cinempatica,
+        opções: BASICO, ULTRAPASSAGEM, MU, MUV, LANCAMENTO_VERTICAL
+        :param kwargs: Variáveis da operação, por exemplo, Vo, V, t, dependendo da operação que for calcular
+        :return: O valor da operação
         """
 
         return self.cinematica.calcular(operacao, kwargs)

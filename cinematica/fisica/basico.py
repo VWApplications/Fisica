@@ -19,86 +19,84 @@ class Basico(object):
 
     def calcular(self, operacao, kwargs):
         """
-        Calcular operações.
+        Calcula as operações de cinemática
+
+        :param operacao: DESLOCAMENTO_ESCALAR, DISTANCIA_PERCORRIDA, INTERVALO_DE_TEMPO e VELOCIDADE_MEDIA
+        :param kwargs: Variáveis da operação, por exemplo, Vo, V, t
+        :return: O valor da operação
         """
 
-        resultado = None
-
         if operacao == 1:
-            resultado = self.deslocamento_escalar(kwargs)
+            resultado = self.deslocamento_escalar(
+                S=kwargs.get('S', None),
+                So=kwargs.get('So', None),
+                Vm=kwargs.get('Vm', None),
+                DT=kwargs.get('DT', None),
+                TP=kwargs.get('TP', 0)
+            )
         elif operacao == 2:
-            resultado = self.distancia_percorrida(kwargs)
+            resultado = self.distancia_percorrida(
+                S=kwargs.get('S', None),
+                So=kwargs.get('So', None)
+            )
         elif operacao == 3:
-            resultado = self.intervalo_de_tempo(kwargs)
+            resultado = self.intervalo_de_tempo(
+                T=kwargs.get('T', None),
+                To=kwargs.get('To', None),
+                Vm=kwargs.get('Vm', None),
+                DS=kwargs.get('DS', None),
+                TP=kwargs.get('TP', 0)
+            )
         elif operacao == 4:
-            resultado = self.velocidade_media(kwargs)
+            resultado = self.velocidade_media(
+                V=kwargs.get('V', None),
+                Vo=kwargs.get('Vo', None),
+                DS=kwargs.get('DS', None),
+                DT=kwargs.get('DT', None),
+                TP=kwargs.get('TP', 0)
+            )
         else:
-            print("Operação invalida!")
+            raise Exception("Operação invalida!")
 
         return resultado
 
-    def deslocamento_escalar(self, kwargs):
+    def deslocamento_escalar(self, S:float=None, So:float=None, Vm:float=None,
+                             DT:float=None, TP:float=0) -> float:
         """
         Deslocamento escalar (DS) é o deslocamento entre o destino (S)
         e o ponto de partida (So) ou é a velocidade média (Vm) vezes
         o intervalo de tempo (DT) + tempo de parada (TP) caso tiver
 
-        Possiveis parâmetros:
-
-            S = Destino
-            So = Ponto de partida
-
-        OU
-
-            Vm = Velocidade média
-            DT = Intervalo de tempo
-            TP = Tempo de parada
-
-        Retorno
-
-            DS = Deslocamento escalar
+        :param S: Destino
+        :param So: Ponto de partida
+        :param Vm: Velocidade média
+        :param DT: Intervalo de tempo
+        :param TP: Tempo de parada
+        :return: Deslocamento escalar ou DS
         """
 
-        S = kwargs.get('S', None)
-        So = kwargs.get('So', None)
-        Vm = kwargs.get('Vm', None)
-        DT = kwargs.get('DT', None)
-        TP = kwargs.get('TP', 0)
-
-        if (S is not None and
-            So is not None):
-
+        if S is not None and So is not None:
             DS = S - So
 
-        elif (Vm is not None and
-              DT is not None):
-
+        elif Vm is not None and DT is not None:
             DS = Vm * (DT + TP)
 
         else:
-            return self.ERROR
+            raise Exception(self.ERROR)
 
         return DS
 
-    def distancia_percorrida(self, kwargs):
+    def distancia_percorrida(self, S:float=None, So:float=None) -> float:
         """
         Distância percorrida (D)
 
-        Parâmetros:
-
-            S = Destino
-            So = Ponto de partida
-
-        Retorno
-
-            D = Distância percorrida
+        :param S: Destino
+        :param So: Ponto de partida
+        :return: Distância percorrida ou D
         """
 
-        S = kwargs.get('S', None)
-        So = kwargs.get('So', None)
-
         if S is None or So is None:
-            return self.ERROR
+            raise Exception(self.ERROR)
 
         if fabs(S) > fabs(So):
             D = fabs(S) - fabs(So)
@@ -107,85 +105,50 @@ class Basico(object):
 
         return D
 
-    def intervalo_de_tempo(self, kwargs):
+    def intervalo_de_tempo(self, T:float=None, To:float=None, DS:float=None,
+                           Vm:float=None, TP:float=None) -> float:
         """
-        Intervalo de tempo (DT)
+        Calculo do intervalor de tempo (DT)
 
-        Parâmetros:
-
-            T = Tempo final
-            To = Tempo inicial
-
-        OU
-
-            DS = Deslocamento escalar
-            Vm = Velocidade média
-            TP = Tempo de parada
-
-
-        Retorno
-
-            DT = Intervalo de tempo
+        :param T: Tempo final
+        :param To: Tempo inicial
+        :param DS: Deslocamento escalar
+        :param Vm: Velocidade média
+        :param TP: Tempo de parada
+        :return: Intervalo de tempo (DT)
         """
 
-        T = kwargs.get('T', None)
-        To = kwargs.get('To', None)
-        Vm = kwargs.get('Vm', None)
-        DS = kwargs.get('DS', None)
-        TP = kwargs.get('TP', 0)
-
-        if (T is not None and
-            To is not None):
-
+        if T is not None and To is not None:
             DT = T - To
 
-        elif (Vm is not None and
-              DS is not None):
-
+        elif Vm is not None and DS is not None:
             DT = DS/Vm
 
         else:
-            return self.ERROR
+            raise Exception(self.ERROR)
 
         return DT + TP
 
-    def velocidade_media(self, kwargs):
+    def velocidade_media(self, V:float=None, Vo:float=None, DT:float=None,
+                         DS:float=None, TP:int=0) -> float:
         """
-        Velocidade escalar média (Vm)
+        Calculo da velocidade escalar média (Vm)
 
-        Parâmetros:
-
-            V = Velocidade final
-            Vo = Velocidade inicial
-
-        OU
-
-            DT = Intervalo de tempo
-            DS = Deslocamento escalar
-            TP = Tempo de parada
-
-        Retorno
-
-            V = Velocidade
+        :param V: Velocidade final
+        :param Vo: Velocidade inicial
+        :param DT: Intervalo de tempo
+        :param DS: Deslocamento escalar
+        :param TP: Tempo de parada
+        :return: Velocidade (V)
         """
 
-        V = kwargs.get('V', None)
-        Vo = kwargs.get('Vo', None)
-        DS = kwargs.get('DS', None)
-        DT = kwargs.get('DT', None)
-        TP = kwargs.get('TP', 0)
-
-        if (V is not None or
-            Vo is not None):
-
+        if V is not None or Vo is not None:
             Vm = V - Vo
 
-        elif (DS is not None and
-              DT is not None):
-
+        elif DS is not None and DT is not None:
             Vm = DS/(DT + TP)
 
         else:
-            return self.ERROR
+            raise Exception(self.ERROR)
 
         return Vm
