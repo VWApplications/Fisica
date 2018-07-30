@@ -6,33 +6,18 @@ class LancamentoVertical(object):
     Lançamento vertical para cima.
     """
 
-    TEMPO_DE_SUBIDA = 1
-    ALTURA_MAXIMA = 2
+    ERROR = "Parâmentros invalidos, por favor verifique a documentação do método"
 
-    ERROR = "Argumentos invalidos, verifique a documentação do método."
-
-    def calcular(self, operacao, kwargs):
+    @classmethod
+    def tempo_de_subida(cls, Ts: float=None, Vo: float=None, g: float=10.0) -> dict:
         """
-        Calcular operações.
+        Calcular o tempo de subida do lançamento.
+
+        :param Ts: Tempo de subida
+        :param Vo: Velocidade Inicial
+        :param g: Aceleração da Gravidade
+        :return: Dicionario {'Ts', 'Vo', 'g'}
         """
-
-        if operacao == 1:
-            resultado = self.tempo_de_subida(kwargs)
-        elif operacao == 2:
-            resultado = self.altura_maxima(kwargs)
-        else:
-            raise NameError(self.ERROR)
-
-        return resultado
-
-    def tempo_de_subida(self, kwargs):
-        """
-        Tempo de subida.
-        """
-
-        Ts = kwargs.get("Ts")
-        Vo = kwargs.get("Vo")
-        g = kwargs.get("g")
 
         if (Ts is None and
             Vo is not None and
@@ -53,8 +38,7 @@ class LancamentoVertical(object):
             g = Vo/Ts
 
         else:
-
-            return self.Error
+            Exception(cls.Error)
 
         resultado = {
             'Ts': Ts,
@@ -64,14 +48,16 @@ class LancamentoVertical(object):
 
         return resultado
 
-    def altura_maxima(self, kwargs):
+    @classmethod
+    def altura_maxima(cls, Hm: float=None, Vo: float=None, g: float=10.0) -> dict:
         """
-        Altura máxima.
-        """
+        Altura máxima do lançamento.
 
-        Hm = kwargs.get("Hm")
-        Vo = kwargs.get("Vo")
-        g = kwargs.get("g")
+        :param Hm: Altura máxima
+        :param Vo: Velocidade Inicial
+        :param g: Aceleração da gravidade
+        :return: Dicionário {'Hm', 'Vo', 'g'}
+        """
 
         if (Hm is None and
             Vo is not None and
@@ -92,8 +78,7 @@ class LancamentoVertical(object):
             g = pow(Vo, 2)/(2*Hm)
 
         else:
-
-            return self.Error
+            Exception(cls.ERROR)
 
         resultado = {
             'Hm': Hm,

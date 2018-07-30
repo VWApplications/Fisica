@@ -1,28 +1,13 @@
 from unittest import TestCase
 from pytest import raises
 
-from cinematica import Cinematica
-from cinematica.fisica import Basico
+from cinematica import Basico
 
 
 class TestVelocidadeMedia(TestCase):
     """
     Teste para os calculos de velocidade média de cinemática básica
     """
-
-    def setUp(self):
-        """
-        Código que executa antes de cada teste
-        """
-
-        self.cinematica = Cinematica(Cinematica.BASICO)
-
-    def tearDown(self):
-        """
-        Código que executa depois de cada teste
-        """
-
-        self.cinematica = None
 
     def test_velocidade_media(self):
         """
@@ -35,8 +20,7 @@ class TestVelocidadeMedia(TestCase):
         Vo = 10 # m/s
         V = 40 # m/s
 
-        velocidade_media = self.cinematica.calcular(
-            Basico.VELOCIDADE_MEDIA,
+        velocidade_media = Basico.velocidade_media(
             V=V,
             Vo=Vo
         )
@@ -57,8 +41,7 @@ class TestVelocidadeMedia(TestCase):
         DS = 10 # metros
         DT = 20 # segundos
 
-        velocidade_media = self.cinematica.calcular(
-            Basico.VELOCIDADE_MEDIA,
+        velocidade_media = Basico.velocidade_media(
             DS=DS,
             DT=DT
         )
@@ -71,8 +54,6 @@ class TestVelocidadeMedia(TestCase):
         """
 
         with raises(Exception) as error:
-            velocidade_media = self.cinematica.calcular(
-                Basico.VELOCIDADE_MEDIA
-            )
+            velocidade_media = Basico.velocidade_media()
 
             self.assertEqual(error.value, "Argumentos invalidos, verifique a documentação do método.")

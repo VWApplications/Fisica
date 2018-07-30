@@ -1,28 +1,13 @@
 from unittest import TestCase
 from pytest import raises
 
-from cinematica import Cinematica
-from cinematica.fisica import Basico
+from cinematica import Basico
 
 
 class TestDeslocamentoEscalar(TestCase):
     """
     Teste para os calculos de deslocamento escalar de cinemática básica
     """
-
-    def setUp(self):
-        """
-        Código que executa antes de cada teste
-        """
-
-        self.cinematica = Cinematica(Cinematica.BASICO)
-
-    def tearDown(self):
-        """
-        Código que executa depois de cada teste
-        """
-
-        self.cinematica = None
 
     def test_deslocamento_escalar(self):
         """
@@ -36,8 +21,7 @@ class TestDeslocamentoEscalar(TestCase):
         posicao_final = 32
         posicao_inicial = 50
 
-        deslocamento_escalar = self.cinematica.calcular(
-            Basico.DESLOCAMENTO_ESCALAR,
+        deslocamento_escalar = Basico.deslocamento_escalar(
             S=posicao_final,
             So=posicao_inicial
         )
@@ -57,8 +41,7 @@ class TestDeslocamentoEscalar(TestCase):
         velocidade = 5 # m/s
         tempo = 60 # segundos
 
-        deslocamento = self.cinematica.calcular(
-            Basico.DESLOCAMENTO_ESCALAR,
+        deslocamento = Basico.deslocamento_escalar(
             Vm=velocidade,
             DT=tempo
         )
@@ -71,8 +54,6 @@ class TestDeslocamentoEscalar(TestCase):
         """
 
         with raises(Exception) as error:
-            deslocamento_escalar = self.cinematica.calcular(
-                Basico.DESLOCAMENTO_ESCALAR
-            )
+            deslocamento_escalar = Basico.deslocamento_escalar()
 
             self.assertEqual(error.value, "Argumentos invalidos, verifique a documentação do método.")

@@ -7,45 +7,24 @@ class MUV(object):
     Obs: Utilize parâmetros nomeados
     """
 
-    VELOCIDADE = 1
-    ACELERACAO = 2
-    VELOCIDADE_MEDIA = 3
-    POSICAO = 4
-    TORRICELLI = 5
-
     ERROR = "Argumentos invalidos, verifique a documentação do método."
 
-    def calcular(self, operacao, kwargs):
-        """
-        Calcular operações.
-        """
-
-        resultado = None
-
-        if operacao == 1:
-            resultado = self.velocidade(kwargs)
-        elif operacao == 2:
-            resultado = self.aceleracao(kwargs)
-        elif operacao == 3:
-            resultado = self.velocidade_media(kwargs)
-        elif operacao == 4:
-            resultado = self.posicao(kwargs)
-        elif operacao == 5:
-            resultado = self.torricelli(kwargs)
-        else:
-            raise NameError(self.ERROR)
-
-        return resultado
-
-    def velocidade(self, kwargs):
+    @classmethod
+    def velocidade(cls, V: float=None, Vo: float=None, a: float=None, t: float=None) -> dict:
         """
         Equação horaria da velocidade do MUV.
-        """
 
-        V = kwargs.get('V', None)
-        Vo = kwargs.get('Vo', None)
-        a = kwargs.get('a', None)
-        t = kwargs.get('t', None)
+        V = Vo + at
+
+        :param V: Velocidade final
+        :param Vo: Velocidade inicial
+        :param a: Aceleração
+        :param t: Tempo
+
+        :return: Dicionário {V, Vo, a, t, movimento}
+
+        Movimento: Acelerado e Progressivo, Retardado e Retrógrado, Retardado e Progressivo ou Acelerado e Retrógrado
+        """
 
         if (V is None and
             a is not None and
@@ -76,7 +55,7 @@ class MUV(object):
             t = (V - Vo)/a
 
         else:
-            return self.ERROR
+            raise Exception(cls.ERROR)
 
         resultado = {
             'V': V,
@@ -98,15 +77,22 @@ class MUV(object):
 
         return resultado
 
-    def aceleracao(self, kwargs):
+    @classmethod
+    def aceleracao(cls, a: float=None, DV: float=None, DT: float=None)-> dict:
         """
         Aceleração ou coeficiente angular da reta ou declividade da reta (a)
         o quanto sua velocidade varia na unidade de tempo.
-        """
 
-        a = kwargs.get('a', None)
-        DV = kwargs.get('DV', None)
-        DT = kwargs.get('DT', None)
+        a = DV/DT
+
+        :param a: Aceleração
+        :param DV: Velocidade
+        :param DT: Intervalo de tempo
+
+        :return: Dicionário {a, DV, DT, angulo}
+
+        Angulo: Agudo ou Obtuso
+        """
 
         if (a is None and
             DV is not None and
@@ -127,7 +113,7 @@ class MUV(object):
             DT = DV/a
 
         else:
-            return self.ERROR
+            raise Exception(cls.ERROR)
 
         resultado = {
             'a': a,
@@ -142,15 +128,20 @@ class MUV(object):
 
         return resultado
 
-    def velocidade_media(self, kwargs):
+    @classmethod
+    def velocidade_media(cls, V: float=None, Vo: float=None, Vm: float=None) -> dict:
         """
         A velocidade média do MUV é a média aritmetica das velocidades nos
         instantes extremos de dois intervalos de tempo quaisquer.
-        """
 
-        V = kwargs.get('V', None)
-        Vo = kwargs.get('Vo', None)
-        Vm = kwargs.get('Vm', None)
+        Vm = V - Vo
+
+        :param V: Velocidade final
+        :param Vo: Velocidade inicial
+        :param Vm: Velocidade média
+
+        :return: Dicionário {V, Vo, Vm}
+        """
 
         if (V is None and
             Vo is not None and
@@ -171,7 +162,7 @@ class MUV(object):
             Vm = (V + Vo)/2
 
         else:
-            return self.ERROR
+            raise Exception(cls.ERROR)
 
         resultado = {
             'Vm': Vm,
@@ -181,16 +172,20 @@ class MUV(object):
 
         return resultado
 
-    def posicao(self, kwargs):
+    @classmethod
+    def posicao(cls, S: float=None, So: float=None, Vo: float=None, t: float=None, a: float=None) -> dict:
         """
         Função horária do espaço (posição) de um móvel em MUV e Torricelli.
-        """
 
-        S = kwargs.get('S', None)
-        So = kwargs.get('So', None)
-        Vo = kwargs.get('Vo', None)
-        t = kwargs.get('t', None)
-        a = kwargs.get('a', None)
+        S = So + Vot + at^2/2
+
+        :param S: Posição Final
+        :param So: Posição Inicial
+        :param Vo: Velocidade Inicial
+        :param t: Tempo
+        :param a: Aceleração
+        :return: Dicionário {S, So, Vo, t, a}
+        """
 
         if (S is None and
             So is not None and
@@ -235,7 +230,7 @@ class MUV(object):
             a = (2*(S - So - Vo*t))/(pow(t, 2))
 
         else:
-            return self.ERROR
+            raise Exception(cls.ERROR)
 
         resultado = {
             'S': S,
@@ -247,17 +242,24 @@ class MUV(object):
 
         return resultado
 
-    def torricelli(self, kwargs):
+    @classmethod
+    def torricelli(cls, V: float=None, S: float=None, So: float=None,
+                   DS: float=None, Vo: float=None, a: float=None) -> dict:
         """
         Esquação de Torricelli, utilizada quando não aparece a variável tempo.
-        """
 
-        V = kwargs.get('V', None)
-        S = kwargs.get('S', None)
-        So = kwargs.get('So', None)
-        DS = kwargs.get('DS', None)
-        Vo = kwargs.get('Vo', None)
-        a = kwargs.get('a', None)
+        V = Vo^2 + 2aDS
+
+        DS = S - So
+
+        :param V: Velocidade final
+        :param S: Posição final
+        :param So: Posição inicial
+        :param DS: Deslocamento Escalar
+        :param Vo: Velocidade inicial
+        :param a: Aceleração
+        :return: Dicionário {V, S, So, DS, Vo, a}
+        """
 
         if (S is not None and
             So is not None and
@@ -294,7 +296,7 @@ class MUV(object):
             a = (pow(V, 2) - pow(Vo, 2))/(2*DS)
 
         else:
-            return self.ERROR
+            raise Exception(cls.ERROR)
 
         resultado = {
             'V': V,

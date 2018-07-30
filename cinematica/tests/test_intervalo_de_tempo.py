@@ -1,28 +1,13 @@
 from unittest import TestCase
 from pytest import raises
 
-from cinematica import Cinematica
-from cinematica.fisica import Basico
+from cinematica import Basico
 
 
 class TestIntervaloDeTempo(TestCase):
     """
     Teste para os calculos de intervalo de tempo de cinemática básica
     """
-
-    def setUp(self):
-        """
-        Código que executa antes de cada teste
-        """
-
-        self.cinematica = Cinematica(Cinematica.BASICO)
-
-    def tearDown(self):
-        """
-        Código que executa depois de cada teste
-        """
-
-        self.cinematica = None
 
     def test_intervalor_de_tempo(self):
         """
@@ -35,8 +20,7 @@ class TestIntervaloDeTempo(TestCase):
         tempo_inicial = 10 # minutos
         tempo_final = 45 # minutos
 
-        intervalo_de_tempo = self.cinematica.calcular(
-            Basico.INTERVALO_DE_TEMPO,
+        intervalo_de_tempo = Basico.intervalo_de_tempo(
             T=tempo_final,
             To=tempo_inicial
         )
@@ -58,8 +42,7 @@ class TestIntervaloDeTempo(TestCase):
         Vm = 4 # km/h
         DS = 1000 # km
 
-        intervalo_de_tempo = self.cinematica.calcular(
-            Basico.INTERVALO_DE_TEMPO,
+        intervalo_de_tempo = Basico.intervalo_de_tempo(
             Vm=Vm,
             DS=DS
         )
@@ -72,8 +55,6 @@ class TestIntervaloDeTempo(TestCase):
         """
 
         with raises(Exception) as error:
-            intervalo_de_tempo = self.cinematica.calcular(
-                Basico.INTERVALO_DE_TEMPO
-            )
+            intervalo_de_tempo = Basico.intervalo_de_tempo()
 
             self.assertEqual(error.value, "Argumentos invalidos, verifique a documentação do método.")

@@ -2,28 +2,13 @@ from unittest import TestCase
 
 from pytest import raises
 
-from cinematica import Cinematica
-from cinematica.fisica import Basico
+from cinematica import Basico
 
 
 class TestDistanciaPercorrida(TestCase):
     """
     Teste para os calculos de distância percorrida de cinemática básica
     """
-
-    def setUp(self):
-        """
-        Código que executa antes de cada teste
-        """
-
-        self.cinematica = Cinematica(Cinematica.BASICO)
-
-    def tearDown(self):
-        """
-        Código que executa depois de cada teste
-        """
-
-        self.cinematica = None
 
     def test_distancia_percorrida(self):
         """
@@ -38,8 +23,7 @@ class TestDistanciaPercorrida(TestCase):
         posicao_inicial1 = 50
         posicao_final1 = 60
 
-        distancia_percorrida1 = self.cinematica.calcular(
-            Basico.DISTANCIA_PERCORRIDA,
+        distancia_percorrida1 = Basico.distancia_percorrida(
             S=posicao_final1,
             So=posicao_inicial1
         )
@@ -49,8 +33,7 @@ class TestDistanciaPercorrida(TestCase):
         posicao_inicial2 = 60
         posicao_final2 = 32
 
-        distancia_percorrida2 = self.cinematica.calcular(
-            Basico.DISTANCIA_PERCORRIDA,
+        distancia_percorrida2 =Basico.distancia_percorrida(
             S=posicao_final2,
             So=posicao_inicial2
         )
@@ -64,9 +47,7 @@ class TestDistanciaPercorrida(TestCase):
         """
 
         with raises(Exception) as error:
-            distancia_percorrida = self.cinematica.calcular(
-                Basico.DISTANCIA_PERCORRIDA
-            )
+            distancia_percorrida = Basico.distancia_percorrida()
 
             self.assertEqual(error.value, "Argumentos invalidos, verifique a documentação do método.")
 
